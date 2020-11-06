@@ -1,0 +1,168 @@
+#include <iostream>
+#include <string.h>
+#include <list>
+#include <iterator>
+using namespace std;
+
+class Decoratiune
+{
+private:
+    string nume;
+    string culoare;
+    float pret;
+    bool reciclabila;
+public:
+    Decoratiune()
+    {
+
+    }
+
+    void citeste()
+    {
+        cout<<"Nume: ";
+        cin>>nume;
+        cout<<"Culoare: ";
+        cin>>culoare;
+        cout<<"Pret: ";
+        cin>>pret;
+        cout<<"Reciclabila?(1 da,0 nu): ";
+        cin>>reciclabila;
+    }
+
+    float preturi()
+    {
+        return pret;
+    }
+
+    friend ostream& operator<<(ostream& os, const Decoratiune& de);
+};
+
+ostream& operator<<(ostream& os, const Decoratiune& de)
+{
+    os <<endl<<"Nume: "<<de.nume<<" Culoare: "<<de.culoare<<" Pret: "<<de.pret<<" Este reciclabil?: "<<de.reciclabila<<endl;
+    return os;
+}
+
+class ListaProduse
+{
+private:
+    list <Decoratiune> lista_decoratiune;
+    static int nr_decoratiuni;
+public:
+    list <Decoratiune> lista()
+    {
+        return lista_decoratiune;
+    }
+
+    float preturi()
+    {
+        float suma = 0;
+        list <Decoratiune> :: iterator i;
+        for(i = lista_decoratiune.begin();i != lista_decoratiune.end(); ++i)
+                {
+                    suma+= (*i).preturi();
+                }
+    return suma;
+    }
+
+    void remove(int k)
+    {
+        k-=1;
+        list <Decoratiune> :: iterator i;
+        int j = 0;
+        for(i = lista_decoratiune.begin();i != lista_decoratiune.end(); ++i)
+        {
+            if(j == k)
+                {lista_decoratiune.erase(k-1);
+                nr_decoratiuni--;
+                return;}
+            j++;
+
+        }
+
+        //lista_decoratiune.erase(lista_decoratiune.begin()+k-1);
+
+
+    }
+
+
+    ListaProduse& operator+(Decoratiune a)
+    {
+        lista_decoratiune.push_back(a);
+        nr_decoratiuni++;
+
+        return *this;
+    }
+
+    ListaProduse& operator=(ListaProduse& lista)
+    {
+        lista_decoratiune = lista.lista_decoratiune;
+
+        return *this;
+    }
+
+    Decoratiune operator [](int index)
+    {
+        list <Decoratiune> :: iterator i;
+        if(index<this->nr_decoratiuni && index>=0)
+            {
+                int j = 0;
+                for(i = lista_decoratiune.begin();i != lista_decoratiune.end(); ++i)
+                {
+                    if(j == index)
+                        return *i;
+                    j++;
+                }
+            }
+    }
+
+    friend ostream& operator<<(ostream& os, ListaProduse& lp);
+};
+
+ostream& operator<<(ostream& os, ListaProduse& lp)
+{
+    list <Decoratiune> :: iterator i;
+        for(i = lp.lista().begin();i != lp.lista().end(); i++)
+        {
+
+            cout<<'\t'<<*i;
+        }
+    return os;
+}
+int ListaProduse::nr_decoratiuni = 0;
+
+
+int main()
+{
+    Decoratiune a;
+
+    Decoratiune a1;
+
+    a.citeste();
+
+    a1.citeste();
+
+    ListaProduse b;
+
+    b = b+a;
+    b = b+a1;
+
+    cout<<b[0]<<endl<<b[1];
+
+    //cout<<b[0].preturi()<<endl;
+
+    //cout<<b.preturi()<<endl;
+
+    cout<<a1;
+
+    b.remove(1);
+    b.remove(2);
+
+    cout<<b;
+
+
+
+
+
+    return 0;
+}
