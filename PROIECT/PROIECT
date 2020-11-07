@@ -964,7 +964,7 @@ public:
 
     void Afisaj_Zile_Ocupate(list <Agenda> zile_planificate,Agenda agenda)
     {
-        cout << "Numarul de zile ocupate: " << agenda.Getter_nr_zile_ocupate()<<endl;
+        //cout << "Numarul de zile ocupate: " << agenda.Getter_nr_zile_ocupate()<<endl;
         list <Agenda> :: iterator it;
         for(it = zile_planificate.begin();it != zile_planificate.end(); ++it)
         {
