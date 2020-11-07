@@ -1206,7 +1206,7 @@ istream& operator>>(istream& is,Comenzi& co)
 
 int main()
 {
-    system("Color 1F");//schimb de culoare al consolei
+    //system("Color 1F");//schimb de culoare al consolei
 
     Calendar calendar;
     Afisaj afisaj;
