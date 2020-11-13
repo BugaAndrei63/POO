@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1604845175 source:c:\users\wag\desktop\codeblocks\unian2\poolaborator\proiect\main.cpp
+	<iostream>
+	<string.h>
+	<math.h>
+	<list>
+	<iomanip>
+	<iterator>
+	<ctime>
+
