@@ -1,0 +1,246 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Persoana
+{
+protected:
+    string nume;
+    string cnp;
+    float inaltime;
+
+public:
+    Persoana()
+    {
+        nume = "Anonim";
+        cnp = "000000000000";
+        inaltime = 0;
+    }
+
+
+    Persoana(const Persoana& p)
+    {
+        nume = p.nume;
+        cnp = p.cnp;
+        inaltime = p.inaltime;
+    }
+
+    Persoana(string nume,string cnp,float inaltime)
+    {
+        this->nume = nume;
+        this->cnp = cnp;
+        this->inaltime = inaltime;
+    }
+
+    void afiseaza()
+    {
+        cout<<nume<<" ";
+        cout<<cnp<<" ";;
+        cout<<inaltime<<" ";;
+    }
+    Persoana operator = (const Persoana& p)
+    {
+        if(this != &p)
+        {
+            nume = p.nume;
+            cnp = p.cnp;
+            inaltime = p.inaltime;
+        }
+
+        return *this;
+    }
+
+    bool operator < (Persoana& p)
+    {
+        if(inaltime < p.inaltime)
+        {
+            return true;
+        }
+        return false;
+    }
+
+};
+
+
+
+
+
+
+class Student:public Persoana
+{
+private:
+    string fac;
+    bool buget;
+    int nr_note;
+    int* note;
+
+
+public:
+    Student():Persoana()
+    {
+        fac = "Facultate";
+        buget = false;
+        nr_note = 1;
+        note = new int[nr_note];
+        note[0] = 0;
+    }
+
+
+    Student(const Student& s):Persoana(s)
+    {
+        fac = s.fac;
+        buget = s.buget;
+        nr_note = s.nr_note;
+        note = new int[nr_note];
+        for(int i = 0;i<nr_note;i++)
+        {
+            note[i] = s.note[i];
+        }
+    }
+
+    Student(string nume,string cnp,float inaltime,string fac,bool buget,int nr_note,int* note):Persoana(nume,cnp,inaltime)
+    {
+        this->fac = fac;
+        this->buget = buget;
+        this->nr_note = nr_note;
+        this->note = new int(this->nr_note);
+        for(int i = 0;i<this->nr_note;i++)
+        {
+            this->note[i] = note[i];
+        }
+
+    }
+
+    Student operator = (const Student& s)
+    {
+        if(this != &s)
+        {
+            Persoana::operator=(s);
+
+            fac = s.fac;
+            buget = s.buget;
+            nr_note = s.nr_note;
+            note = new int[nr_note];
+            for(int i = 0;i<nr_note;i++)
+            {
+                note[i] = s.note[i];
+            }
+
+        }
+
+        return *this;
+    }
+
+    float media()
+    {
+        float media = 0;
+        for(int i = 0;i<nr_note;i++)
+        {
+            media+=note[i];
+        }
+
+        return media/nr_note;
+
+    }
+
+    void afiseaza()
+    {
+        Persoana::afiseaza();
+        cout<<this->fac<<" ";;
+        cout<<this->buget<<" ";;
+        cout<<this->nr_note<<" ";;
+        for(int i = 0;i<this->nr_note;i++)
+        {
+            cout<<this->note[i]<<" ";;
+        }
+    }
+
+    bool operator <(Student& s)
+    {
+        if(media()<s.media())
+        {
+            return true;
+        }
+        return false;
+    }
+
+
+    ~Student()
+    {
+        if(note != NULL)
+            delete [] note;
+    }
+};
+
+
+
+int main()
+{
+    Persoana p;
+    Student s;
+    p.afiseaza();
+    cout<<endl;
+    s.afiseaza();
+    cout<<endl;
+
+
+    Persoana p1("Andrei","1234567890",1.2);
+    Persoana p2("Andrei2","1234567891",1.3);
+    Persoana p3(p2);
+    Persoana p4;
+    p4 = p2;
+
+    int a[3] = {10,10,10};
+    int b[3] = {9,9,9};
+    Student s1("Andrei","1234567890",1.8,"FMI",true,3,a);
+    Student s2("Andrei2","1234567892",1.2,"FMI",true,3,b);
+    Student s3(s2);
+    Student s4;
+    s4 = s2;
+
+    cout<<"P1"<<endl;;
+    p1.afiseaza();
+    cout<<endl;
+    cout<<"P2"<<endl;
+    p2.afiseaza();
+    cout<<endl;
+    cout<<"S1"<<endl;
+    s1.afiseaza();
+    cout<<endl;
+    cout<<"S2"<<endl;
+    s2.afiseaza();
+    cout<<endl;
+    cout<<"P3"<<endl;
+    p3.afiseaza();
+    cout<<endl;
+    cout<<"S3"<<endl;
+    s3.afiseaza();
+    cout<<endl;
+    cout<<"P4"<<endl;
+    p4.afiseaza();
+    cout<<endl;
+    cout<<"S4"<<endl;
+    s4.afiseaza();
+    cout<<endl;
+
+
+    if(s1<s2)
+    {
+        cout<<"S2 are media mai mare";
+    }
+    else
+        cout<<"S1 are media mai mare";
+
+    cout<<endl;
+
+    if(p1<p2)
+    {
+        cout<<"P2 este mai inalt";
+    }
+    else
+        cout<<"P1 este mai inalt";
+
+
+
+    return 0;
+}
