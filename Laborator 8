@@ -1,0 +1,153 @@
+#include <iostream>
+
+using namespace std;
+class Taxe
+{
+public:
+    virtual float Impozit()=0;
+    virtual int an()=0;
+};
+class Produs{
+protected:
+ string nume;
+ float pretBrut;
+ public:
+     void afisareBrand(){
+
+     cout<<"Acest produs apartine EDI>.RL";
+
+     }
+    virtual float calculeazaPret()=0;
+    friend ostream& operator<<(ostream& out,const Produs& p){
+
+    out<<p.nume;
+    return out;
+
+
+   }
+    friend istream& operator >>(istream& in, Produs&p){
+
+        cout<<"Numele este: ";
+        in>>p.nume;
+        cout<<"Pretul brut este: ";
+        in>>p.pretBrut;
+        return in;
+
+    }
+
+
+};
+
+class ProdusPersibail:public Produs{
+    string dataExpirare;
+public:
+
+        float calculeazaPret(){
+
+        return pretBrut+(40*pretBrut)/100;
+
+    } // DACA NU AR EXISTA FUNCTIA ASTA, ATUNCI SI CLASA ASTA AR DEVENI ABSTRACTA CA CLASA DE BAZA, DEOARECE CLASA DE BAZA ARE O METODA VIRTUALA PURA
+
+    friend ostream& operator<<(ostream& out,const ProdusPersibail& p)
+    {
+        out<<(Produs&)p;
+        out<<" "<<p.dataExpirare;
+      return out;
+
+    }
+    friend istream& operator >>(istream& in, ProdusPersibail&p){
+
+    in>>(Produs&)p;
+    cout<<"Dati data: ";
+    in>>p.dataExpirare;
+    return in;}
+
+
+};
+
+class ProdusNePerisbalil:public Produs{
+    int garantie;
+public:
+    float calculeazaPret(){
+
+        return pretBrut+(10*pretBrut)/100;
+
+    }
+
+
+    friend ostream& operator<<(ostream& out,const ProdusNePerisbalil& p)
+    {
+        out<<(Produs&)p;
+        out<<" "<<p.garantie;
+      return out;
+
+    }
+    friend istream& operator >>(istream& in, ProdusNePerisbalil&p){
+
+    in>>(Produs&)p;
+    cout<<"ani garantie: ";
+    in>>p.garantie;
+    return in;}
+
+
+
+
+
+
+};
+
+class listaProduse
+{
+
+public:
+    Produs* p[100];
+    int indice = 0;
+    void addPP(Produs& pp)
+    {
+        p[indice] = &pp;
+        indice++;
+    }
+    void addPn(Produs& pn)
+    {
+        p[indice] = &pn;
+        indice++;
+    }
+    void rmv(int indice)
+    {
+        p[indice] = NULL;
+    }
+};
+
+int main()
+{
+    //Produs *p[2];
+
+    listaProduse lista;
+
+    ProdusNePerisbalil pn;
+    ProdusPersibail pp;
+    cin>>pp;
+
+//    Produs p2;
+
+    //p[0]=new ProdusPersibail();
+    //p[0]=&pp;
+
+    //p[1]=new ProdusNePerisbalil();
+    //p[1]=&pn;
+
+    //cin>>pn>>pp;
+
+    //cout<<p[0]->calculeazaPret()<<" "<<p[1]->calculeazaPret();
+
+    lista.addPP(pp);
+
+    cout<<*(lista.p[0]);
+
+    lista.rmv(0);
+
+    cout<<lista.p[0];
+
+    //IN INTERFATA O SA PUNEM DOAR METODE VIRTUALE PURE IN CLASA DE BAZA SI FARA VARIABILE
+    return 0;
+}
