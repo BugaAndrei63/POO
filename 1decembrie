@@ -1,0 +1,158 @@
+#include <iostream>
+#include <list>
+#include <iterator>
+#include <vector>
+using namespace std;
+
+
+
+class Automobil
+{
+protected:
+    string marca, model, folosinta;
+public:
+    Automobil()
+    {
+        marca = "marca necunoscuta";
+        model = "model necunoscut";
+        folosinta = "folosinta necunoscuta";
+    }
+    virtual void afisare()=0;
+};
+
+class MasiniUndercover : public Automobil
+{
+    int vitezaSporita, indiceProtectie, rezistentaGloante;
+public:
+    MasiniUndercover():Automobil()
+    {
+        folosinta = "undercover";
+
+        vitezaSporita = 0;
+        indiceProtectie = 0;
+        rezistentaGloante = 0;
+    }
+    void afisare()
+    {
+        cout<<marca<<endl;
+        cout<<model<<endl;
+        cout<<folosinta<<endl;
+
+        cout<<vitezaSporita<<endl;
+        cout<<indiceProtectie<<endl;
+        cout<<rezistentaGloante<<endl;
+
+    }
+
+};
+
+class MasiniInterventie : public Automobil
+{
+    bool dotataCuArma;
+public:
+    MasiniInterventie():Automobil()
+    {
+        folosinta = "transport persoane";
+
+        dotataCuArma = 0;
+
+    }
+    void afisare()
+    {
+        cout<<marca<<endl;
+        cout<<model<<endl;
+        cout<<folosinta<<endl;
+
+        cout<<dotataCuArma<<endl;
+
+
+    }
+};
+
+class MasiniEmisieReceptie : public Automobil
+{
+    float distantaAcustica, distantaVideo;
+public:
+    MasiniEmisieReceptie():Automobil()
+    {
+        folosinta = "spionaj";
+
+        distantaAcustica = 0.0;
+        distantaVideo = 0.0;
+    }
+
+    void afisare()
+    {
+        cout<<marca<<endl;
+        cout<<model<<endl;
+        cout<<folosinta<<endl;
+
+        cout<<distantaAcustica<<endl;
+        cout<<distantaVideo<<endl;
+    }
+};
+
+class ListaAutomobile
+{
+
+public:
+    int it=1;
+    Automobil **lista = new Automobil*[it];
+
+    ListaAutomobile operator+(Automobil& au)
+    {
+        if(it > 1)
+        {
+            Automobil **lista2 = new Automobil*[it];
+
+            for(int i = 0;i<it-1;i++)
+            {
+                lista2[i] = lista[i];
+            }
+            lista2[it-1] = &au;
+            lista = new Automobil*[it];
+            for(int i = 0;i<it;i++)
+            {
+                lista[i] = lista2[i];
+            }
+            delete []lista2;
+            it++;
+        }else
+        {
+            lista[it-1] = &au;
+            it++;
+        }
+
+        return *this;
+    }
+
+
+};
+
+int main()
+{
+    ListaAutomobile a;
+
+    MasiniUndercover m;
+
+    MasiniInterventie m1;
+
+    MasiniEmisieReceptie m2;
+
+    int k = 0;
+
+    a = a+m;
+    k++;
+    a = a+m1;
+    k++;
+    a = a+m2;
+    k++;
+
+    for(int i=0;i<k;i++)
+    {
+        a.lista[i]->afisare();
+    }
+
+
+    return 0;
+}
