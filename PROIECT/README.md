@@ -9,4 +9,4 @@ Si 3 comenzi secundare: < / > ,zodie ,inapoi.
 
 Deocamdatat aplicatia poate afisa pe ecran un calendar al anului si lunii introduse de user, planifica zile specifice, afisa zilele ocupate de catre user , de a afisa data si ora curenta ,de a afisa zilele de sarbatoare ale unui an introdus de la tastatura si de a afla zodia care pica in orice zi dorita de catre utilizator.
 
-### Daca doriti sa schimbati culoarea consolei decomentati la linia 1210 functia system("Color 1F");
+### Daca doriti sa schimbati culoarea consolei decomentati functia system("Color 1F"); din main (functioneaza doar pe masini Windows)
