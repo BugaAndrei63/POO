@@ -9,15 +9,26 @@
 
 using namespace std;
 
-class Calendar
+class AjutorClase /// Clasa abstracta
+{
+    virtual void Help()=0;
+    virtual void NumeClasa()
+    {
+        cout<<"AjutorClase";
+    }
+};
+
+
+class Calendar:public AjutorClase
 {
 private:
     const char *luni[12];
     int* zile_in_luna;
-    int an, luna;
     bool an_bisect;
     char* data_timp_curent;
     float cod;
+protected:
+    int an, luna;
 
 
 public:
@@ -216,6 +227,16 @@ public:
         cout << "Data locala si timpul actual sunt: " << data_timp_curent << endl;
     }
 
+    void Help()override
+    {
+        cout<<"Clasa Calendar se ocupa de: \nSetarea lunilor dintr-un an\nCalculul anilor bisecti\nCalculul zilei de inceput a oricarui an\nPreluarea datii si a timpului curent";
+    }
+
+    void NumeClasa()override
+    {
+        cout<<"\nCalendar";
+    }
+
     //operatori
      Calendar& operator=(Calendar& c2)
     {
@@ -402,7 +423,185 @@ ostream& operator<<(ostream& os, const Calendar& c)
     return os;
 }
 
-class Agenda
+
+
+class CalendarZodiac:public Calendar ///Clasa derivata de tipul IS A (mosteneste si AjutorClase, deoarece Calendar mosteneste AjutorClase)
+{
+private:
+    string zodii[12] = {"Capricorn","Varsator","Pesti","Berbec","Taur","Gemeni","Rac","Leu","Fecioara","Balanta","Scorpion","Sagetator"};
+
+
+public:
+    //constructori
+    CalendarZodiac(Calendar c):Calendar(c)
+    {
+
+    }
+    //functii
+    string Afla_zodie(int zi)
+    {
+        switch(this->luna) /// luna este protected in Calendar
+        {
+            case 0:
+                switch(zi)
+                {
+                    case 1 ... 19:
+                        return zodii[0];
+                        break;
+                    case 20 ... 31:
+                        return zodii[1];
+                        break;
+                }
+                break;
+
+            case 1:
+                switch(zi)
+                {
+                    case 1 ... 18:
+                        return zodii[1];
+                        break;
+                    case 19 ... 29:
+                        return zodii[2];
+                        break;
+                }
+                break;
+
+            case 2:
+                switch(zi)
+                {
+                    case 1 ... 20:
+                        return zodii[2];
+                        break;
+                    case 21 ... 31:
+                        return zodii[3];
+                        break;
+                }
+                break;
+
+            case 3:
+                switch(zi)
+                {
+                    case 1 ... 20:
+                        return zodii[3];
+                        break;
+                    case 21 ... 30:
+                        return zodii[4];
+                        break;
+                }
+                break;
+
+            case 4:
+                switch(zi)
+                {
+                    case 1 ... 21:
+                        return zodii[4];
+                        break;
+                    case 22 ... 31:
+                        return zodii[5];
+                        break;
+                }
+                break;
+
+            case 5:
+                switch(zi)
+                {
+                    case 1 ... 21:
+                        return zodii[5];
+                        break;
+                    case 22 ... 30:
+                        return zodii[6];
+                        break;
+                }
+                break;
+
+            case 6:
+                switch(zi)
+                {
+                    case 1 ... 21:
+                        return zodii[6];
+                        break;
+                    case 22 ... 31:
+                        return zodii[7];
+                        break;
+                }
+                break;
+
+            case 7:
+                switch(zi)
+                {
+                    case 1 ... 22:
+                        return zodii[7];
+                        break;
+                    case 23 ... 31:
+                        return zodii[8];
+                        break;
+                }
+                break;
+
+            case 8:
+                switch(zi)
+                {
+                    case 1 ... 22:
+                        return zodii[8];
+                        break;
+                    case 23 ... 30:
+                        return zodii[9];
+                        break;
+                }
+                break;
+
+            case 9:
+                switch(zi)
+                {
+                    case 1 ... 22:
+                        return zodii[9];
+                        break;
+                    case 23 ... 31:
+                        return zodii[10];
+                        break;
+                }
+                break;
+
+            case 10:
+                switch(zi)
+                {
+                    case 1 ... 21:
+                        return zodii[10];
+                        break;
+                    case 22 ... 30:
+                        return zodii[11];
+                        break;
+                }
+                break;
+
+            case 11:
+                switch(zi)
+                {
+                    case 1 ... 21:
+                        return zodii[11];
+                        break;
+                    case 22 ... 31:
+                        return zodii[0];
+                        break;
+                }
+                break;
+        }
+    }
+
+    void Help()override
+    {
+        cout<<"Clasa CalendarZodiac se ocupa de: \nCalculul zodiei pentru fiecare zi din orice luna";
+    }
+
+    void NumeClasa()override
+    {
+        cout<<"\nCalendarZodiac";
+    }
+
+};
+
+
+class Agenda:public AjutorClase
 {
 private:
     int an, luna, zi;
@@ -544,9 +743,10 @@ public:
         strcat(this->descriere_zi,"\n");
     }
 
-    void Setter_nr_zile_ocupate()
+
+    void Setter_nr_zile_ocupate(int n=1)
     {
-        nr_zile_ocupate++;
+        nr_zile_ocupate+=n;
     }
 
     void Setter_zi_ocupata()
@@ -625,6 +825,14 @@ public:
         }
         zile_planificate.push_back(*this);
         nr_zile_ocupate++;
+    }
+    void Help()override
+    {
+        cout<<"Clasa Agenda se ocupa de:\nProgramarea unei zile dintr-un calendar\nSetarea unei descrieri ale acelei zile ocupate";
+    }
+    void NumeClasa()override
+    {
+        cout<<"\nAgenda";
     }
 
     //operatori
@@ -727,6 +935,7 @@ public:
 
     };
 };
+
 istream& operator>>(istream& is,Agenda& ag)
 {
         int an,luna,zi;
@@ -801,7 +1010,170 @@ ostream& operator<<(ostream& os, const Agenda& ag)
 
 int Agenda::nr_zile_ocupate;
 
-class Afisaj
+class AgendaLista ///Relatie de tipul HAS A
+{
+
+public:
+    Agenda a;
+    list <Agenda> lista;
+    Agenda get_agenda()
+    {
+        return a;
+    }
+
+    list<Agenda> get_lista()
+    {
+        return lista;
+    }
+};
+
+
+class Sarbatori: public Agenda ///Relatie de tipul IS A (mosteneste si AjutorClase, deoarece Agenda mosteneste AjutorClase)
+{
+
+char* descriere_sarbatoare[7] = {"Pastele catolic","Sf. Andrei","Sf.Nicolae","Martisorul","Marea unire","Mica unire","Craciunul"};
+list <Agenda> lista_sarbatori;
+
+public:
+    //functii
+    list<Agenda> Setare_sarbatori()
+    {
+        int an;
+        cout<<"Introduceti anul pentru care vreti sa vizualizati sarbatorile(0 pentru anul acesta): ";
+        cin>>an;
+        if(an != 0)
+            this->Setter_an(an);
+
+        else
+        {
+            time_t now = time(0);
+            char* data = ctime(&now);
+            an = 0;
+            int j=1000;
+            for(int i= strlen(data)-5;i<=strlen(data)-1;i++)
+            {
+                an += (data[i] - '0')*j;
+                j = j / 10;
+            }
+            this->Setter_an(an);
+
+        }
+
+        this->Setter_nr_zile_ocupate(7);
+
+
+        Setter_luna(11);
+        Setter_zi(25);
+        Setter_descriere_zi();
+        Setter_descriere_zi(descriere_sarbatoare[6]);
+        lista_sarbatori.push_back(*this);
+
+        Setter_luna(10);
+        Setter_zi(30);
+        Setter_descriere_zi();
+        Setter_descriere_zi(descriere_sarbatoare[1]);
+        lista_sarbatori.push_back(*this);
+
+        Setter_luna(11);
+        Setter_zi(6);
+        Setter_descriere_zi();
+        Setter_descriere_zi(descriere_sarbatoare[2]);
+        lista_sarbatori.push_back(*this);
+
+        Setter_luna(2);
+        Setter_zi(1);
+        Setter_descriere_zi();
+        Setter_descriere_zi(descriere_sarbatoare[3]);
+        lista_sarbatori.push_back(*this);
+
+        Setter_luna(11);
+        Setter_zi(1);
+        Setter_descriere_zi();
+        Setter_descriere_zi(descriere_sarbatoare[4]);
+        lista_sarbatori.push_back(*this);
+
+        Setter_luna(0);
+        Setter_zi(24);
+        Setter_descriere_zi();
+        Setter_descriere_zi(descriere_sarbatoare[5]);
+        lista_sarbatori.push_back(*this);
+
+        Setter_luna(3);
+        Setter_zi(gaussEaster(this->Getter_an()));
+        Setter_descriere_zi();
+        Setter_descriere_zi(descriere_sarbatoare[0]);
+        lista_sarbatori.push_back(*this);
+
+
+
+
+    return lista_sarbatori;
+
+    }
+
+    int gaussEaster(int Y) ///cod de a calcula cand pica pastele preluat de pe https://www.geeksforgeeks.org/how-to-calculate-the-easter-date-for-a-given-year-using-gauss-algorithm/
+    {
+        float A, B, C, P, Q, M, N, D, E;
+
+    // All calculations done
+    // on the basis of
+    // Gauss Easter Algorithm
+        A = Y % 19;
+        B = Y % 4;
+        C = Y % 7;
+        P = (float)floor(Y / 100);
+        Q = (float)floor((13 + 8 * P) / 25);
+        M = (int)(15 - Q + P - P / 4) % 30;
+        N = (int)(4 + P - P / 4) % 7;
+        D = (int)(19 * A + M) % 30;
+        E = (int)(2 * B + 4 * C + 6 * D + N) % 7;
+        int days = (int)(22 + D + E);
+
+    // A corner case,
+    // when D is 29
+        if ((D == 29) && (E == 6))
+            {
+                //cout << Y << "-04-19";
+                return 19;
+            }
+    // Another corner case,
+    // when D is 28
+        else if ((D == 28) && (E == 6))
+            {
+                //cout << Y << "-04-18";
+                return 18;
+            }
+        else
+        {
+        // If days > 31, move to April
+        // April = 4th Month
+            if (days > 31)
+            {
+                //cout << Y << "-04-"<< (days - 31);
+                return days - 31;
+            }
+            else
+            {
+            // Otherwise, stay on March
+            // March = 3rd Month
+                //cout << Y << "-03-"<< days;
+                return days;
+            }
+        }
+}
+
+    void Help()override
+    {
+        cout<<"Clasa Sarbatori se ocupa de:\nCalcului zilei de paste Catolic al unui an\nGasirea zilelor de sarbatoare romanesti ale oricarui an";
+    }
+    void NumeClasa()override
+    {
+        cout<<"\nSarbatori";
+    }
+};
+
+
+class Afisaj:public AjutorClase
 {
 private:
     char* bun_venit;
@@ -812,7 +1184,7 @@ public:
     Afisaj()
     {
         bun_venit = new char[500];
-        strcpy(bun_venit,"===Planificator personal===\n                          Meniu principal\n\nComenzi : \nPentru a viziona calendarul, introduceti 'calendar' \nPentru a viziona zilele planificate, introduceti 'ocupat' \nPentru a planifica o zi specifica, introduceti 'plan'(acest lucru se poate face si din calendar) \nPentru a viziona data si timpul curent, introduceti 'data' \nPentru a opri programul, introduceti 'stop' \nComanda: ");
+        strcpy(bun_venit,"===Planificator personal===\n                          Meniu principal\n\nComenzi : \nPentru a viziona calendarul, introduceti 'calendar' \nPentru a viziona zilele planificate, introduceti 'ocupat' \nPentru a planifica o zi specifica, introduceti 'plan'(acest lucru se poate face si din calendar) \nPentru a viziona data si timpul curent, introduceti 'data' \nPentru a vizualiza zilele de sarbatoare, introduceti 'sarbatori' \nPentru a opri programul, introduceti 'stop' \nComanda: ");
         afisaje_active=+1;
 
     }
@@ -957,9 +1329,10 @@ public:
 
     void Afisaj_Meniu_Calendar()
     {
-        cout<<"Daca doriti sa planificati o zi, introduceti 'plan' "<<endl;
-        cout<<"Pentru a schimba pagina, introduceti '<' sau '>' "<<endl;
-        cout<<"Pentru a va intoarce la meniul principal, introduceti 'inapoi' "<<endl;
+        cout<<"Daca doriti sa planificati o zi, introduceti 'plan' "<<endl<<endl;
+        cout<<"Pentru a schimba pagina, introduceti '<' sau '>' "<<endl<<endl;
+        cout<<"Pentru a vizualiza zodia dintr-o zi specifica a lunei curente, introduceti 'zodie' "<<endl<<endl;
+        cout<<"Pentru a va intoarce la meniul principal, introduceti 'inapoi' "<<endl<<endl;
     }
 
     void Afisaj_Zile_Ocupate(list <Agenda> zile_planificate,Agenda agenda)
@@ -972,6 +1345,42 @@ public:
             cout<<'\t'<<*it;
         }
     }
+
+    void Afisaj_Zodie(CalendarZodiac cz)
+    {
+        int zi;
+        cout<<"Introduceti ziua dorita: ";
+        cin>>zi;
+        while(zi > cz.Getter_zile_in_luna(cz.Getter_luna()) || zi <= 0 || !cin)
+        {
+            cout<<endl<<"!!!Zi inexistenta!!!"<<endl;
+            cin.clear();
+            cin.ignore(100,'\n');
+            cout<<endl<<"Introduceti o zi valida: ";
+            cin>>zi;
+        }
+        cout<<cz.Afla_zodie(zi)<<endl;
+        cout<<"Comanda: ";
+    }
+
+    void Afisaj_Sarbatori(list<Agenda> lista_sarbatori)
+    {
+        for(list<Agenda>::iterator i = lista_sarbatori.begin();i!=lista_sarbatori.end();++i)
+        {
+            cout<<*i;
+        }
+    }
+
+    void Help()override
+    {
+        cout<<"Clasa Afisaj se ocupa de:\nAfisarea diverselor date pe ecran\n";
+    }
+    void NumeClasa()override
+    {
+        cout<<"Afisaj";
+    }
+
+
     //operatori
     Afisaj& operator=(Afisaj& af)
     {
@@ -1014,12 +1423,16 @@ istream& operator>>(istream& is,Afisaj& af)
     af.set_afisaje_active();
     return is;
 }
-class Comenzi
+
+
+class Comenzi:public AjutorClase
 {
 private:
     const char* comenzi[5];
-    char* comanda;
     bool activ;
+protected:
+    char* comanda;
+
 
 public:
     //constructor fara parametrii
@@ -1130,7 +1543,7 @@ public:
 
     void Verifica_comanda(string &comanda)
     {
-        while((comanda != "calendar" && comanda != "stop" && comanda != "ocupat"&& comanda != "plan"&& comanda != "data") || !cin)
+        while((comanda != "calendar" && comanda != "stop" && comanda != "ocupat"&& comanda != "plan"&& comanda != "data"&& comanda != "sarbatori") || !cin)
         {
             cout<<"!!!Comanda incorecta!!!"<<endl;
             cin.clear();
@@ -1139,6 +1552,16 @@ public:
             cin>>comanda;
         }
     }
+
+    void Help()override
+    {
+        cout<<"Clasa Comenzi se ocupa de:\nVerificarea comenzilor de a fi introduse corect\nActiuni diverse pentru a folosi aplicatia";
+    }
+    void NumeClasa()override
+    {
+        cout<<"\nComenzi";
+    }
+
     //operatori
     Comenzi& operator=(Comenzi& co)
     {
@@ -1170,7 +1593,6 @@ public:
             delete[] comanda;
     }
 };
-
 ostream& operator<<(ostream& os,Comenzi& co)
 {
         for(int i = 0; i < 5;i++)
@@ -1204,69 +1626,90 @@ istream& operator>>(istream& is,Comenzi& co)
     return is;
 }
 
+
+
 int main()
 {
-    system("Color 1F");//schimb de culoare al consolei
+    /*system("Color 1F");*////schimb de culoare al consolei
 
     Calendar calendar;
     Afisaj afisaj;
     Comenzi comenzi;
     Agenda agenda;
+    AgendaLista zile_planificate;
 
+    /*Sarbatori a;
+    CalendarZodiac b(calendar);
+
+    calendar.Help();
+    calendar.NumeClasa();
+    cout<<"\n\n";
+    agenda.Help();
+    agenda.NumeClasa();
+    cout<<"\n\n";
+    a.Help();
+    a.NumeClasa();
+    cout<<"\n\n";
+    afisaj.Help();
+    afisaj.NumeClasa();
+    cout<<"\n\n";
+    comenzi.Help();
+    comenzi.NumeClasa();
+    cout<<"\n\n";
+    b.Help();
+    b.NumeClasa();*/ ///exemplificarea conceptului de virtualizare oferit de clasa AjutorClase
 
     /*Comenzi b;
     cin>>b;
-    cout<<b;*/ //test >> pentru comenzi
+    cout<<b;*/ ///test >> pentru comenzi
 
     /*Comenzi s;
-    s = comenzi;*/ //test =
-    /*Comenzi c(comenzi);*/ //test constructor copiere
+    s = comenzi;*/ ///test =
+    /*Comenzi c(comenzi);*/ ///test constructor copiere
     /*char* comand = "da";
     Comenzi a(comand);
-    Comenzi b(comand,true);*/ // test constructor cu parametrii 1 / test constructor cu parametrii 2
+    Comenzi b(comand,true);*/ /// test constructor cu parametrii 1 / test constructor cu parametrii 2
 
-    /*cin>>afisaj;*/ //test >>
+    /*cin>>afisaj;*/ ///test >>
 
-    /*Afisaj a(afisaj);*/ // test constructor de copiere
+    /*Afisaj a(afisaj);*/ /// test constructor de copiere
     /*char* bun_venit = {"===Planificator personal===\n   Meniu principal\n\nComenzi : \n Pentru a viziona calendarul, introduceti 'calendar' \n Pentru a viziona calendarul, introduceti 'calendar' \n Pentru a planifica o zi specifica, introduceti 'plan'(acest lucru se poate face si din calendar) \n Pentru a viziona data si timpul curent, introduceti 'data' \n Pentru a opri programul, introduceti 'stop' \n Comanda: "};
-    Afisaj afisaj(bun_venit,1);*/ // test constructor cu param 1
+    Afisaj afisaj(bun_venit,1);*/ /// test constructor cu param 1
     /*char* bun_venit = {"===Planificator personal===\n   Meniu principal\n\nComenzi : \n Pentru a viziona calendarul, introduceti 'calendar' \n Pentru a viziona calendarul, introduceti 'calendar' \n Pentru a planifica o zi specifica, introduceti 'plan'(acest lucru se poate face si din calendar) \n Pentru a viziona data si timpul curent, introduceti 'data' \n Pentru a opri programul, introduceti 'stop' \n Comanda: "};
-    Afisaj afisaj1(bun_venit,1);*/ // test constructor cu param 2
+    Afisaj afisaj1(bun_venit,1);*/ /// test constructor cu param 2
    /*Afisaj a = afisaj;*/
 
 
-    /*Calendar c(calendar);*/   //test constructor copiere
-    /*Calendar c2(2020,0);*/ //test constructor cu param 1
+    /*Calendar c(calendar);*/   ///test constructor copiere
+    /*Calendar c2(2020,0);*/ ///test constructor cu param 1
     /*int zile[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
-    Calendar c2(2020,0,6,true,zile);*///test constructor cu param 2
+    Calendar c2(2020,0,6,true,zile);*////test constructor cu param 2
     /*Calendar c2;
     c2= calendar;
-    cout<<c2;*////test operator = pentru calendar
-    /*cout<<calendar[2];*/ //test [] pentru calendar
+    cout<<c2;*/ ///test operator = pentru calendar
+    /*cout<<calendar[2];*/ ///test [] pentru calendar
     /*++calendar;
-    cout<<calendar;*/ //test ++ pentru calendar
+    cout<<calendar;*/ ///test ++ pentru calendar
     /*calendar-1;
-    cout<<calendar;*/ //test + si - pentru calendar
-    /*cout<<int(calendar);*/ //test operator cast int
+    cout<<calendar;*/ ///test + si - pentru calendar
+    /*cout<<int(calendar);*/ ///test operator cast int
     /*Calendar c(2021,1);
     if(c==calendar)
         cout<<"Da";
     else
-        cout<<"Nu";*/ //test operator >= si == pentru calendar
+        cout<<"Nu";*/ ///test operator >= si == pentru calendar
 
     /*Agenda c(2020,2,1,"Evenimentul zilei");
-    cout<<c;*/ //test constructor cu param 1
+    cout<<c;*/ ///test constructor cu param 1
     /*char input[500] = {'a','b'};
     Agenda c2(2020,2,1,"Evenimentul zilei",true,input,1);
-    cout<<c2;*/ //test constructor cu param 2
+    cout<<c2;*/ ///test constructor cu param 2
     /*agenda++;
-    cout<<agenda;*/ //test ++ pentru agenda
+    cout<<agenda;*/ ///test ++ pentru agenda
     /*agenda-1;
-    cout<<agenda;*/ //test operator + si -
-    /*cout<<int(agenda);*/// test operator cast int pentru agenda
+    cout<<agenda;*/ ///test operator + si -
+    /*cout<<int(agenda);*/ /// test operator cast int pentru agenda
 
-
-    list<Agenda> zile_planificate;
 
     string comanda = " ";
 
@@ -1284,7 +1727,7 @@ int main()
         {
             if(comenzi.Introducere_an(calendar))
             {
-                afisaj.Afisaj_Calendar(calendar,zile_planificate);
+                afisaj.Afisaj_Calendar(calendar,zile_planificate.lista);
 
                 afisaj.Afisaj_Meniu_Calendar();
 
@@ -1294,23 +1737,30 @@ int main()
 
                     if(comanda == "plan")
                     {
-                        agenda.Planificare_zi(calendar.Getter_an(),calendar.Getter_luna(),zile_planificate);
+                        agenda.Planificare_zi(calendar.Getter_an(),calendar.Getter_luna(),zile_planificate.lista);
 
-                        afisaj.Afisaj_Calendar(calendar,zile_planificate);
+                        afisaj.Afisaj_Calendar(calendar,zile_planificate.lista);
 
                         afisaj.Afisaj_Meniu_Calendar();
                     }
                     if(comanda == "<")
                     {
-                        comenzi.Mutare_pagina_calendar(afisaj,calendar,false,zile_planificate);
+                        comenzi.Mutare_pagina_calendar(afisaj,calendar,false,zile_planificate.lista);
 
                         afisaj.Afisaj_Meniu_Calendar();
                     }
                     if(comanda == ">")
                     {
-                        comenzi.Mutare_pagina_calendar(afisaj,calendar,true,zile_planificate);
+                        comenzi.Mutare_pagina_calendar(afisaj,calendar,true,zile_planificate.lista);
 
                         afisaj.Afisaj_Meniu_Calendar();
+                    }
+                    if(comanda == "zodie")
+                    {
+                        CalendarZodiac zodiac(calendar);
+                        afisaj.Afisaj_Zodie(zodiac);
+
+
                     }
                 }
                 cout << string( 50, '\n' );
@@ -1319,7 +1769,7 @@ int main()
 
         if(comanda == "ocupat")
         {
-            afisaj.Afisaj_Zile_Ocupate(zile_planificate,agenda);;
+            afisaj.Afisaj_Zile_Ocupate(zile_planificate.lista,agenda);;
             while(comanda != "inapoi")
             {
                 cout<<endl<<"Pentru a va intoarce la meniul principal, introduceti 'inapoi' "<<endl;
@@ -1341,17 +1791,16 @@ int main()
         {
             while(comanda != "inapoi")
             {
-                Agenda zi_specifica;
 
                 list <Agenda> :: iterator i;
 
                 bool introdus = false;
 
-                cin>>zi_specifica;
+                cin>>zile_planificate.a;;
 
-                for(i = zile_planificate.begin();i != zile_planificate.end(); ++i)
+                for(i = zile_planificate.lista.begin();i != zile_planificate.lista.end(); ++i)
                 {
-                    if(zi_specifica == *i)
+                    if(zile_planificate.a == *i)
                     {
                         cout<<"Data introdusa a fost deja planificata";
                         introdus = true;
@@ -1360,9 +1809,20 @@ int main()
 
                 if(introdus == false)
                 {
-                    zile_planificate.push_back(zi_specifica);
+                    zile_planificate.lista.push_back(zile_planificate.a);
                 }
                 cout<<endl<<"Introduceti alta data folosind comanda 'plan' sau intoarceti-va inapoi folosind 'inapoi' "<<endl;
+                cin>>comanda;
+            }
+        }
+
+        if(comanda == "sarbatori")
+        {
+            Sarbatori sarbatori;
+            afisaj.Afisaj_Sarbatori(sarbatori.Setare_sarbatori());
+            while(comanda != "inapoi")
+            {
+                cout<<endl<<"Pentru a va intoarce la meniul principal, introduceti 'inapoi' "<<endl;
                 cin>>comanda;
             }
         }
