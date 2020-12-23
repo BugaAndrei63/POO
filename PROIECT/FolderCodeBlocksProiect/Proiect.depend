@@ -17,3 +17,13 @@
 	<iterator>
 	<ctime>
 
+1607344976 source:c:\users\wag\desktop\gitrepo\laborator\proiect\foldercodeblocksproiect\main.cpp
+	<iostream>
+	<string.h>
+	<math.h>
+	<list>
+	<iomanip>
+	<iterator>
+	<ctime>
+	<fstream>
+

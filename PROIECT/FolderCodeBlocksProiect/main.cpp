@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <iterator>
 #include <ctime>
+#include <fstream>
 
 
 using namespace std;
@@ -352,6 +353,11 @@ public:
       if(zile_in_luna != NULL)
       {
           delete [] zile_in_luna;
+      }
+
+      if(data_timp_curent != NULL)
+      {
+          delete [] data_timp_curent;
       }
     };
 };
@@ -1591,6 +1597,8 @@ public:
     {
         if(comanda != NULL)
             delete[] comanda;
+        if(comenzi != NULL)
+            delete[] comenzi;
     }
 };
 ostream& operator<<(ostream& os,Comenzi& co)
@@ -1626,6 +1634,35 @@ istream& operator>>(istream& is,Comenzi& co)
     return is;
 }
 
+
+/*class Salveaza
+{
+    ofstream save;
+
+    save.open("SaveFile.txt");
+
+    int an, luna, zi;
+    char* descriere_zi;
+    char input[500];
+    bool zi_ocupata;
+    static int nr_zile_ocupate;
+
+public:
+    void save_zile_ocupate(list <Agenda> lista)
+    {
+        <Agenda>::iterator i;
+        for(i = lista.begin();i != lista.end();++i)
+        {
+
+        }
+    }
+};*/
+
+
+class Incarca
+{
+
+};
 
 
 int main()
