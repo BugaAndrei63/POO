@@ -1,11 +1,16 @@
 #include <iostream>
 #include <string.h>
+#include <string>
 #include <math.h>
 #include <list>
 #include <iomanip>
 #include <iterator>
 #include <ctime>
 #include <fstream>
+#include <exception>
+#include <map>
+#include <vector>
+#include <set>
 
 
 using namespace std;
@@ -354,11 +359,6 @@ public:
       {
           delete [] zile_in_luna;
       }
-
-      if(data_timp_curent != NULL)
-      {
-          delete [] data_timp_curent;
-      }
     };
 };
 istream& operator>>(istream& is, Calendar& c)
@@ -631,20 +631,22 @@ public:
 
         zi_ocupata = false;
 
-        descriere_zi = new char[strlen("Ocupatie") + 1];
-        strcpy(descriere_zi,"Ocupatie");
+        //descriere_zi = new char[strlen("Ocupatie") + 1];
 
-        nr_zile_ocupate = 0;
+        descriere_zi = "Ocupatie";
+
+
+        nr_zile_ocupate=0;
     }
     //constructor cu parametrii 1
     Agenda(int an,int luna,int zi,char* descriere_zi)
     {
         this->an = an;
-        this->luna = luna-1;
+        this->luna = luna;
         this->zi = zi;
         this->descriere_zi = descriere_zi;
         zi_ocupata = true;
-        nr_zile_ocupate = 0;
+        nr_zile_ocupate++;
         strcpy(input,"");
     }
     //constructor cu parametrii 2
@@ -655,7 +657,7 @@ public:
         this->zi = zi;
         this->descriere_zi = descriere_zi;
         this->zi_ocupata = zi_ocupata;
-        this->nr_zile_ocupate = nr_zile_ocupate;
+        this->nr_zile_ocupate++;
         for(int i = 0;i<500;i++)
         {
             this->input[i] = input[i];
@@ -765,8 +767,7 @@ public:
         an = anul_dorit;
         luna = luna_dorita;
 
-        if(descriere_zi != NULL)
-            delete [] descriere_zi;
+
 
         descriere_zi = new char[501];
         strcpy(descriere_zi,"");
@@ -832,6 +833,223 @@ public:
         zile_planificate.push_back(*this);
         nr_zile_ocupate++;
     }
+
+    void Planificare_zi_map(int anul_dorit,int luna_dorita,map <int,Agenda>& zile_planificate)
+    {
+        an = anul_dorit;
+        luna = luna_dorita;
+
+
+
+        descriere_zi = new char[501];
+        strcpy(descriere_zi,"");
+
+        input[0] = 0; //goleste input-ul
+
+        cout<<"Introduceti ziua pe care doriti sa o accesati: ";
+        cin>>zi;
+
+
+        Calendar c(anul_dorit,luna_dorita-1);
+        while(zi > c.Getter_zile_in_luna(luna_dorita) || zi <= 0 || !cin)
+        {
+            cin.clear();
+            cin.ignore(500,'\n');
+            cout<<"Zi inexistenta"<<endl;
+            cout<<"Introduceti ziua pe care doriti sa o accesati: ";
+            cin>>zi;
+        }
+
+
+
+
+        map <int,Agenda> :: iterator i;
+        for(i = zile_planificate.begin();i != zile_planificate.end(); ++i)
+        {
+            if(*this == (*i).second)
+            {
+                zi_ocupata = true;
+            }
+        }
+
+
+        if(zi_ocupata == true)
+        {
+            cout<<"Zi deja ocupata";
+            zi_ocupata = false;
+            return;
+        }
+
+
+        cout<<endl<<"Puteti scrie ce doriti: "<<endl;
+        cout<<"Daca ati terminat, introduceti 'gata' "<<endl;
+
+
+        cin.clear();
+        cin.ignore(500,'\n');
+
+        while(strcmp(input,"gata") != 0)
+        {
+
+            cin.get(input,500);
+
+            if(strcmp(input,"gata") != 0)
+            {
+                strcat(descriere_zi,input);
+                strcat(descriere_zi,"\n");
+            }
+            cin.clear();
+            cin.ignore(500,'\n');
+
+        }
+        zile_planificate.insert(pair<int,Agenda>(nr_zile_ocupate+1,*this));
+        nr_zile_ocupate++;
+    }
+
+    void Planificare_zi_set(int anul_dorit,int luna_dorita,set <Agenda>& zile_planificate)
+    {
+        an = anul_dorit;
+        luna = luna_dorita;
+
+
+
+        descriere_zi = new char[501];
+        strcpy(descriere_zi,"");
+
+        input[0] = 0; //goleste input-ul
+
+        cout<<"Introduceti ziua pe care doriti sa o accesati: ";
+        cin>>zi;
+
+
+        Calendar c(anul_dorit,luna_dorita-1);
+        while(zi > c.Getter_zile_in_luna(luna_dorita) || zi <= 0 || !cin)
+        {
+            cin.clear();
+            cin.ignore(500,'\n');
+            cout<<"Zi inexistenta"<<endl;
+            cout<<"Introduceti ziua pe care doriti sa o accesati: ";
+            cin>>zi;
+        }
+
+
+
+
+        set <Agenda> :: iterator i;
+        for(i = zile_planificate.begin();i != zile_planificate.end(); ++i)
+        {
+            if(*this == *i)
+            {
+                zi_ocupata = true;
+            }
+        }
+
+
+        if(zi_ocupata == true)
+        {
+            cout<<"Zi deja ocupata";
+            zi_ocupata = false;
+            return;
+        }
+
+
+        cout<<endl<<"Puteti scrie ce doriti: "<<endl;
+        cout<<"Daca ati terminat, introduceti 'gata' "<<endl;
+
+
+        cin.clear();
+        cin.ignore(500,'\n');
+
+        while(strcmp(input,"gata") != 0)
+        {
+
+            cin.get(input,500);
+
+            if(strcmp(input,"gata") != 0)
+            {
+                strcat(descriere_zi,input);
+                strcat(descriere_zi,"\n");
+            }
+            cin.clear();
+            cin.ignore(500,'\n');
+
+        }
+        zile_planificate.insert(*this);
+        nr_zile_ocupate++;
+    }
+
+    void Planificare_zi_vector(int anul_dorit,int luna_dorita,vector <Agenda>& zile_planificate)
+    {
+        an = anul_dorit;
+        luna = luna_dorita;
+
+
+
+        descriere_zi = new char[501];
+        strcpy(descriere_zi,"");
+
+        input[0] = 0; //goleste input-ul
+
+        cout<<"Introduceti ziua pe care doriti sa o accesati: ";
+        cin>>zi;
+
+
+        Calendar c(anul_dorit,luna_dorita-1);
+        while(zi > c.Getter_zile_in_luna(luna_dorita) || zi <= 0 || !cin)
+        {
+            cin.clear();
+            cin.ignore(500,'\n');
+            cout<<"Zi inexistenta"<<endl;
+            cout<<"Introduceti ziua pe care doriti sa o accesati: ";
+            cin>>zi;
+        }
+
+
+
+
+        vector <Agenda> :: iterator i;
+        for(i = zile_planificate.begin();i != zile_planificate.end(); ++i)
+        {
+            if(*this == *i)
+            {
+                zi_ocupata = true;
+            }
+        }
+
+
+        if(zi_ocupata == true)
+        {
+            cout<<"Zi deja ocupata";
+            zi_ocupata = false;
+            return;
+        }
+
+
+        cout<<endl<<"Puteti scrie ce doriti: "<<endl;
+        cout<<"Daca ati terminat, introduceti 'gata' "<<endl;
+
+
+        cin.clear();
+        cin.ignore(500,'\n');
+
+        while(strcmp(input,"gata") != 0)
+        {
+
+            cin.get(input,500);
+
+            if(strcmp(input,"gata") != 0)
+            {
+                strcat(descriere_zi,input);
+                strcat(descriere_zi,"\n");
+            }
+            cin.clear();
+            cin.ignore(500,'\n');
+
+        }
+        zile_planificate.push_back(*this);
+        nr_zile_ocupate++;
+    }
+
     void Help()override
     {
         cout<<"Clasa Agenda se ocupa de:\nProgramarea unei zile dintr-un calendar\nSetarea unei descrieri ale acelei zile ocupate";
@@ -936,8 +1154,6 @@ public:
     //destructor
     ~Agenda()
     {
-        if(descriere_zi != NULL)
-            delete [] descriere_zi;
 
     };
 };
@@ -979,8 +1195,7 @@ istream& operator>>(istream& is,Agenda& ag)
         cout<<endl<<"Puteti scrie ce doriti: "<<endl;
         cout<<"Daca ati terminat, introduceti 'gata' "<<endl;
 
-        if(ag.Getter_descriere_zi() != NULL)
-            delete [] ag.Getter_descriere_zi();
+
         ag.Setter_descriere_zi();
 
         input[0] = 0;
@@ -1022,6 +1237,10 @@ class AgendaLista ///Relatie de tipul HAS A
 public:
     Agenda a;
     list <Agenda> lista;
+    map <int,Agenda> lista1;
+    set <Agenda> lista2;
+    vector <Agenda> lista3;
+
     Agenda get_agenda()
     {
         return a;
@@ -1189,8 +1408,8 @@ public:
     //constructor fara parametrii
     Afisaj()
     {
-        bun_venit = new char[500];
-        strcpy(bun_venit,"===Planificator personal===\n                          Meniu principal\n\nComenzi : \nPentru a viziona calendarul, introduceti 'calendar' \nPentru a viziona zilele planificate, introduceti 'ocupat' \nPentru a planifica o zi specifica, introduceti 'plan'(acest lucru se poate face si din calendar) \nPentru a viziona data si timpul curent, introduceti 'data' \nPentru a vizualiza zilele de sarbatoare, introduceti 'sarbatori' \nPentru a opri programul, introduceti 'stop' \nComanda: ");
+        bun_venit = "===Planificator personal===\n                          Meniu principal\n\nComenzi : \nPentru a viziona calendarul, introduceti 'calendar' \nPentru a viziona zilele planificate, introduceti 'ocupat' \nPentru a planifica o zi specifica, introduceti 'plan'(acest lucru se poate face si din calendar) \nPentru a viziona data si timpul curent, introduceti 'data' \nPentru a vizualiza zilele de sarbatoare, introduceti 'sarbatori' \nPentru a opri programul, introduceti 'stop' \nPentru a salva modificarile, introduceti 'salveaza' \nComanda: ";
+
         afisaje_active=+1;
 
     }
@@ -1365,6 +1584,7 @@ public:
             cout<<endl<<"Introduceti o zi valida: ";
             cin>>zi;
         }
+
         cout<<cz.Afla_zodie(zi)<<endl;
         cout<<"Comanda: ";
     }
@@ -1372,6 +1592,28 @@ public:
     void Afisaj_Sarbatori(list<Agenda> lista_sarbatori)
     {
         for(list<Agenda>::iterator i = lista_sarbatori.begin();i!=lista_sarbatori.end();++i)
+        {
+            cout<<*i;
+        }
+    }
+    void Afisaj_Zile_Ocupate_map(map<int,Agenda> lista_sarbatori)
+    {
+        for(map<int,Agenda>::iterator i = lista_sarbatori.begin();i!=lista_sarbatori.end();++i)
+        {
+            cout<<(*i).first;
+            cout<<(*i).second;
+        }
+    }
+    void Afisaj_Zile_Ocupate_set(set<Agenda> lista_sarbatori)
+    {
+        for(set<Agenda>::iterator i = lista_sarbatori.begin();i!=lista_sarbatori.end();++i)
+        {
+            cout<<*i;
+        }
+    }
+    void Afisaj_Zile_Ocupate_vector(vector<Agenda> lista_sarbatori)
+    {
+        for(vector<Agenda>::iterator i = lista_sarbatori.begin();i!=lista_sarbatori.end();++i)
         {
             cout<<*i;
         }
@@ -1405,8 +1647,8 @@ public:
     //destructor
     ~Afisaj()
     {
-        if(bun_venit != NULL)
-            delete [] bun_venit;
+        /*if(bun_venit != NULL)
+            delete [] bun_venit;*/
     }
 };
 int Afisaj::afisaje_active = 0;
@@ -1434,7 +1676,7 @@ istream& operator>>(istream& is,Afisaj& af)
 class Comenzi:public AjutorClase
 {
 private:
-    const char* comenzi[5];
+    const char* comenzi[6];
     bool activ;
 protected:
     char* comanda;
@@ -1442,14 +1684,13 @@ protected:
 
 public:
     //constructor fara parametrii
-    Comenzi():comenzi{"calendar","stop","ocupat","plan","data"}
+    Comenzi():comenzi{"calendar","stop","ocupat","plan","data","salveaza"}
     {
-        comanda = new char[strlen("")+1];
-        strcpy(comanda,"");
+        comanda = " ";
         activ = true;
     }
     //constructor cu parametrii 1
-    Comenzi(char* comanda):comenzi{"calendar","stop","ocupat","plan","data"}
+    Comenzi(char* comanda):comenzi{"calendar","stop","ocupat","plan","data","salveaza"}
     {
         this->comanda = new char[strlen(comanda)+1];
         strcpy(this->comanda,comanda);
@@ -1457,7 +1698,7 @@ public:
         cout<<this->comanda;
     }
     //constructor cu parametrii 2
-    Comenzi(char* comanda,bool activ):comenzi{"calendar","stop","ocupat","plan","data"}
+    Comenzi(char* comanda,bool activ):comenzi{"calendar","stop","ocupat","plan","data","salveaza"}
     {
         this->comanda = new char[strlen(comanda)+1];
         strcpy(this->comanda,comanda);
@@ -1549,7 +1790,7 @@ public:
 
     void Verifica_comanda(string &comanda)
     {
-        while((comanda != "calendar" && comanda != "stop" && comanda != "ocupat"&& comanda != "plan"&& comanda != "data"&& comanda != "sarbatori") || !cin)
+        while((comanda != "calendar" && comanda != "stop" && comanda != "ocupat"&& comanda != "plan"&& comanda != "data"&& comanda != "sarbatori"&& comanda != "salveaza") || !cin)
         {
             cout<<"!!!Comanda incorecta!!!"<<endl;
             cin.clear();
@@ -1595,10 +1836,7 @@ public:
     //destructor
     ~Comenzi()
     {
-        if(comanda != NULL)
-            delete[] comanda;
-        if(comenzi != NULL)
-            delete[] comenzi;
+
     }
 };
 ostream& operator<<(ostream& os,Comenzi& co)
@@ -1635,11 +1873,9 @@ istream& operator>>(istream& is,Comenzi& co)
 }
 
 
-/*class Salveaza
+class ManagerSalvare
 {
-    ofstream save;
-
-    save.open("SaveFile.txt");
+    fstream save;
 
     int an, luna, zi;
     char* descriere_zi;
@@ -1648,32 +1884,116 @@ istream& operator>>(istream& is,Comenzi& co)
     static int nr_zile_ocupate;
 
 public:
-    void save_zile_ocupate(list <Agenda> lista)
+    void save_zile_ocupate(list <Agenda>& lista)
     {
-        <Agenda>::iterator i;
-        for(i = lista.begin();i != lista.end();++i)
+        try
         {
+            save.open("SaveFile.txt",ios::out | ios::trunc);
+            if(!save.is_open())
+            {
+                throw save.is_open();
+            }
 
+            list <Agenda>::iterator i;
+
+            for(i = lista.begin();i != lista.end();++i)
+            {
+
+                save<<i->Getter_an()<<endl;
+                save<<i->Getter_luna()<<endl;
+                save<<i->Getter_zi()<<endl;
+                save<<i->Getter_descriere_zi();
+                save<<"end"<<endl;
+            }
+
+            save.close();
+            cout<<"Salvare cu succes";
         }
+        catch(bool)
+        {
+            cout<<"Deschidere fisier esuata";
+            save.close();
+        }
+
     }
-};*/
+
+    void load_zile_ocupate(list<Agenda>& lista)
+    {
+        try
+        {
+            save.open("SaveFile.txt",ios::in);
+            string temp;
+            int linie = 1;
+            int an,luna,zi;
+            string descriere;
+            bool checked = false;
+
+            while(getline(save,temp))
+            {
+                if(temp == "" && checked == false)
+                {
+                    throw temp;
+                }
+
+                checked = true;
+
+                if(linie == 1)
+                    {
+                        an = stoi(temp);
+                        cout<<an<<endl;
+                    }
+                if(linie == 2)
+                    {
+                        luna = stoi(temp);
+                        cout<<luna<<endl;
+                    }
+                if(linie == 3)
+                    {
+                        zi = stoi(temp);
+                        cout<<zi<<endl;
+                    }
+                if(linie >= 4 && temp != "end")
+                    {
+                        descriere+= temp + "\n";
+                        cout<<descriere<<endl;
+                    }
+                if(temp == "end")
+                {
+                    Agenda ag(an,luna,zi,const_cast<char*>(descriere.c_str()));///.c_str() returneaza un const char*, folosesc const_cast<> ca sa scap de atributul const
+                    lista.push_back(ag);
+                    descriere = "\0";
+                    linie = 0;
+                }
+
+                linie++;
 
 
-class Incarca
-{
+            }
+            save.close();
+        }
+        catch(string)
+        {
+            cout<<"Fisier SaveFile.txt gol";
+            save.close();
+        }
 
+
+    }
 };
+
 
 
 int main()
 {
     /*system("Color 1F");*////schimb de culoare al consolei
-
     Calendar calendar;
     Afisaj afisaj;
     Comenzi comenzi;
     Agenda agenda;
     AgendaLista zile_planificate;
+    ManagerSalvare salvare;
+
+
 
     /*Sarbatori a;
     CalendarZodiac b(calendar);
@@ -1750,6 +2070,8 @@ int main()
 
     string comanda = " ";
 
+    salvare.load_zile_ocupate(zile_planificate.lista);
+
     while(comanda != "stop")
     {
         cout<<afisaj;
@@ -1774,7 +2096,10 @@ int main()
 
                     if(comanda == "plan")
                     {
-                        agenda.Planificare_zi(calendar.Getter_an(),calendar.Getter_luna(),zile_planificate.lista);
+                        agenda.Planificare_zi(calendar.Getter_an(),calendar.Getter_luna(),zile_planificate.lista); /// folosind list
+                        /*agenda.Planificare_zi_map(calendar.Getter_an(),calendar.Getter_luna(),zile_planificate.lista1);*/ /// folosind map
+                        /*agenda.Planificare_zi_set(calendar.Getter_an(),calendar.Getter_luna(),zile_planificate.lista2);*/ ///folosind set
+                        /*agenda.Planificare_zi_vector(calendar.Getter_an(),calendar.Getter_luna(),zile_planificate.lista3);*/ ///folosind vector
 
                         afisaj.Afisaj_Calendar(calendar,zile_planificate.lista);
 
@@ -1797,7 +2122,6 @@ int main()
                         CalendarZodiac zodiac(calendar);
                         afisaj.Afisaj_Zodie(zodiac);
 
-
                     }
                 }
                 cout << string( 50, '\n' );
@@ -1806,7 +2130,10 @@ int main()
 
         if(comanda == "ocupat")
         {
-            afisaj.Afisaj_Zile_Ocupate(zile_planificate.lista,agenda);;
+            afisaj.Afisaj_Zile_Ocupate(zile_planificate.lista,agenda); /// folosind list
+            /*afisaj.Afisaj_Zile_Ocupate_map(zile_planificate.lista1);*/ /// folosind map
+            /*afisaj.Afisaj_Zile_Ocupate_set(zile_planificate.lista2);*/ ///folosind set
+            /*afisaj.Afisaj_Zile_Ocupate_vector(zile_planificate.lista3);*/ ///folosind vector
             while(comanda != "inapoi")
             {
                 cout<<endl<<"Pentru a va intoarce la meniul principal, introduceti 'inapoi' "<<endl;
@@ -1846,7 +2173,10 @@ int main()
 
                 if(introdus == false)
                 {
-                    zile_planificate.lista.push_back(zile_planificate.a);
+                    zile_planificate.lista.push_back(zile_planificate.a); /// folosind list
+                    /*zile_planificate.lista1.insert(pair<int,Agenda>(zile_planificate.a.Getter_nr_zile_ocupate()+1,zile_planificate.a));*/ /// folosind map
+                    /*zile_planificate.lista2.insert(zile_planificate.a);*/ ///folosind set
+                    /*zile_planificate.lista3.push_back(zile_planificate.a);*/ ///folosind vector
                 }
                 cout<<endl<<"Introduceti alta data folosind comanda 'plan' sau intoarceti-va inapoi folosind 'inapoi' "<<endl;
                 cin>>comanda;
@@ -1863,6 +2193,11 @@ int main()
                 cin>>comanda;
             }
         }
+        if(comanda == "salveaza")
+        {
+            salvare.save_zile_ocupate(zile_planificate.lista);
+        }
+
     }
 
     return 0;

@@ -8,14 +8,17 @@
 	<iterator>
 	<ctime>
 
-1606661871 source:c:\users\wag\desktop\pooproiect\laborator\proiect\foldercodeblocksproiect\main.cpp
+1608928930 source:c:\users\wag\desktop\pooproiect\laborator\proiect\foldercodeblocksproiect\main.cpp
 	<iostream>
 	<string.h>
+	<string>
 	<math.h>
 	<list>
 	<iomanip>
 	<iterator>
 	<ctime>
+	<fstream>
+	<exception>
 
 1607344976 source:c:\users\wag\desktop\gitrepo\laborator\proiect\foldercodeblocksproiect\main.cpp
 	<iostream>
