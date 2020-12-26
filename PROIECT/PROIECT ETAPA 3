@@ -1877,12 +1877,6 @@ class ManagerSalvare
 {
     fstream save;
 
-    int an, luna, zi;
-    char* descriere_zi;
-    char input[500];
-    bool zi_ocupata;
-    static int nr_zile_ocupate;
-
 public:
     void save_zile_ocupate(list <Agenda>& lista)
     {
