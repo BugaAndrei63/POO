@@ -435,7 +435,7 @@ int main()
         if(comanda == "8")
         {
             ofstream fisier;
-            fisier.open("Comenzi.txt");
+            fisier.open("Comenzi.txt"); ///trebuie creat un fisier nou cu numele Comenzi.txt
             for(int i = 0 ;i < listaCom.get_lista().size();i++ )
                 fisier<<listaCom.get_lista()[i];
 
